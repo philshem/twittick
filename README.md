@@ -9,7 +9,7 @@ http://dev.markitondemand.com/
 
 and automatically posts the parsed results to twitter with
 
-https://dev.twitter.com/
+https://dev.twitter.com/ (requires authentication)
 
 and requires
 
