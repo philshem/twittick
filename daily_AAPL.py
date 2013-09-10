@@ -2,13 +2,26 @@
 #
 # Copyright 2013 Philip Shemella
 #
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
-__author__ = 'psny18@gmail.com'
-__version__ = '0.0.1'
+#'''A library that provides a Python interface to the Twitter API'''
 
-#    this code takes a stock quote from markitondemand's API and posts it to twitter.
-#    the following code is designed for Apple stock (AAPL).
+#__author__ = 'psny18@gmail.com'
+#__version__ = '0.0.1'
 
+# this code takes a stock quote from markitondemand's API and posts it to twitter
+# the following code is designed for Apple stock (AAPL).
+ 
 import oauth2 as oauth
 import requests
 import urllib2
@@ -52,8 +65,8 @@ def markit():
             direction = 'flat'
 
 # make printlist
-        printlist.append(str(symbol))
-#        printlist.append(str(timestamp))
+        printlist.append('#Apple stock update - ')
+        printlist.append(''.join(('$',str(symbol))))
         printlist.append(': $')
         printlist.append(str('{0:.2f}'.format(lastprice)))
         printlist.append(', ')
@@ -63,18 +76,33 @@ def markit():
         printlist.append(' (')
         printlist.append(str('{0:.2f}'.format(changepercent)))
         printlist.append('%)')
-    else:
-        printlist.append('')
+        dt = timestamp.split()
+#        if int(dt[3]) == 9
+        newtime = ' on '+dt[0]+' '+dt[1]+' '+dt[2]+ \
+            ' '+dt[5]+' at '+dt[3]+' EST'
+        printlist.append(newtime)
+
+# need to fix the open/close
+        tt=dt[3].split(':')
+        if int(tt[0]) == 15 and int(tt[1]) == 59:
+            printlist.append(' (close) ')
+        elif int(tt[0]) == 16 and int(tt[1]) == 00:
+            printlist.append(' (close) ')
+        elif int(tt[0]) == 9 and int(tt[1]) == 30:
+            printlist.append(' (open) ')
+
+#    else:
+#        printlist.append('')
 
     status = ''.join(''.join(key) for key in printlist)
+#    print status
     return status
         
 def twit(status):
-#must be added by user
-    api = twitter.Api(consumer_key='consumer key', \
-                          consumer_secret='consumer secret', \
-                          access_token_key='access token key', \
-                          access_token_secret='access token secret')
+    api = twitter.Api(consumer_key='enter your consumer key', \
+                          consumer_secret='enter your consumer secret', \
+                          access_token_key='enter your access token key', \
+                          access_token_secret='enter your access token secret')
 
     status = api.PostUpdate(status)
     print status.text
