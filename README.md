@@ -1,18 +1,15 @@
 twittick
+
 ========
 
-STOCK TICKER ON TWITTER
+STOCK TICKER FOR TWITTER
 
-takes market data from
+https://twitter.com/daily_AAPL
 
-http://dev.markitondemand.com/
+takes market data - http://dev.markitondemand.com/
 
-and automatically posts the parsed results to twitter with
+and automatically posts the parsed results to twitter - https://dev.twitter.com/ (requires authentication)
 
-https://dev.twitter.com/ (requires authentication)
+and requires - https://github.com/bear/python-twitter
 
-and requires
-
-https://github.com/bear/python-twitter
-
-as well as some other python libraries
+as well as some other standard python libraries
