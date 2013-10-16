@@ -17,7 +17,7 @@
 #'''A library that provides a Python interface to the Twitter API'''
 
 #__author__ = 'psny18@gmail.com'
-#__version__ = '0.0.1'
+#__version__ = '0.1.0'
 
 # this code takes a stock quote from markitondemand's API and posts it to twitter
 # the following code is designed for Apple stock (AAPL).
@@ -40,6 +40,8 @@ def markit():
 # {'Data': {'Status': 'SUCCESS', 'High': 492.85, 'Name': 'Apple Inc', 'LastPrice': 487.115, 'Timestamp': 'Fri Aug 30 15:59:59 UTC-04:00 2013', 'Symbol': 'AAPL', 'ChangePercent': -0.0207300252865306, 'Volume': 568074, 'ChangePercentYTD': -8.466778372217, 'Low': 486.51, 'ChangeYTD': 532.1729, 'MarketCap': 442542516155, 'Open': 492.01, 'Change': -0.100999999999999}}
 
     printlist = []
+    old_time = ''
+    tag = ''
 #    if True:
     if quote['Data']['Status'] == 'SUCCESS':
         symbol = quote['Data']['Symbol']
@@ -82,31 +84,36 @@ def markit():
             ' '+dt[5]+' at '+dt[3]+' EST'
         printlist.append(newtime)
 
-# need to fix the open/close
         tt=dt[3].split(':')
-        if int(tt[0]) == 15 and int(tt[1]) == 59:
-            printlist.append(' (close) ')
-        elif int(tt[0]) == 16 and int(tt[1]) == 00:
-            printlist.append(' (close) ')
+        if tag != ' (close) ' and int(tt[0]) == 15 and int(tt[1]) == 59:
+            tag = ' (close) '
+            printlist.append(tag)
         elif int(tt[0]) == 9 and int(tt[1]) == 30:
-            printlist.append(' (open) ')
+            tag = ' (open) '
+            printlist.append(tag)
 
-#    else:
-#        printlist.append('')
+    if timestamp != old_time:
+        status = ''.join(''.join(key) for key in printlist)
+    else:
+        status = ''
 
-    status = ''.join(''.join(key) for key in printlist)
+    old_time = timestamp
 #    print status
     return status
         
 def twit(status):
-    api = twitter.Api(consumer_key='enter your consumer key', \
-                          consumer_secret='enter your consumer secret', \
-                          access_token_key='enter your access token key', \
-                          access_token_secret='enter your access token secret')
+    api = twitter.Api(consumer_key='consumer_key', \
+                          consumer_secret='consumer_secret', \
+                          access_token_key='access_token_key', \
+                          access_token_secret='access_token_secret')
 
     status = api.PostUpdate(status)
     print status.text
 
 if __name__ == "__main__":
+    status = ''
     status = markit()
-    twit(status)
+#    print status
+    if status != '':
+#        print status
+        twit(status)
